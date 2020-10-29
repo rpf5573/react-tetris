@@ -5,16 +5,45 @@ import actions from '../actions';
 import { speeds, blankLine, blankMatrix, clearPoints, eachLines } from '../unit/const';
 import { music } from '../unit/music';
 
-
-const getStartMatrix = (startLines) => { // 生成startLines
-  const getLine = (min, max) => { // 返回标亮个数在min~max之间一行方块, (包含边界)
+/**
+ * 시작 메트릭스를 얻는다?
+ * 맨 처음에 시작할때 그 빈 매트릭스를 얻는것 같은데
+ */
+const getStartMatrix = (startLines) => {
+  /**
+   * min, max 왜필요하노~?
+   * 뭐가 최소고 뭐가 최대라는거지?
+   */
+  const getLine = (min, max) => {
+    /**
+     * count는 min ~ max 까지 나오겠네
+     * 이 카운트가 뭘 의미하는걸까?
+     */
     const count = parseInt((((max - min) + 1) * Math.random()) + min, 10);
     const line = [];
-    for (let i = 0; i < count; i++) { // 插入高亮
+    /**
+     * 이거는 검정 벽돌을 넣는 개수를 말하는거고
+     */
+    for (let i = 0; i < count; i++) {
       line.push(1);
     }
-    for (let i = 0, len = 10 - count; i < len; i++) { // 在随机位置插入灰色
+
+    /**
+     * 이 코드를 돌리면 이렇게 된다.
+     * line = [1, 1, 1, 1]
+     * 
+     * line = [0, 1, 0, 0, 1, 1, 0, 1, 0, 0]
+     * 1이 4개있는건 변함이 없지만 0이 랜덤하게 사이사이에 낀다. 물론
+     * line = [1, 1, 1, 1, 0, 0, 0, 0, 0, 0] 이렇게 될 수도 있겠징?
+     */
+    for (let i = 0, len = 10 - count; i < len; i++) {
       const index = parseInt(((line.length + 1) * Math.random()), 10);
+      
+      /**
+       * var arr = [1, 2, 3, 4, 5]
+       * arr.splice(2, 0, 0) ==> [1, 2, 0, 3, 4, 5]
+       * 약간 중간에 끼워 넣는게 가능하다!
+       */
       line.splice(index, 0, 0);
     }
 
@@ -22,6 +51,10 @@ const getStartMatrix = (startLines) => { // 生成startLines
   };
   let startMatrix = List([]);
 
+  /**
+   * 이거는 라인에 따라서 회색 벽돌이 더 많아질 수도 있음을 의미한다.
+   * 여기서는 라인의 인덱스가 위쪽이 작고 아래쪽이 크다. 그래서 결과적으로 아래쪽에는 회색벽돌이 많고, 상대적으로 위쪽에는 회색벽돌이 적다.
+   */
   for (let i = 0; i < startLines; i++) {
     if (i <= 2) { // 0-3
       startMatrix = startMatrix.push(getLine(5, 8));
@@ -31,6 +64,11 @@ const getStartMatrix = (startLines) => { // 生成startLines
       startMatrix = startMatrix.push(getLine(3, 9));
     }
   }
+
+  /**
+   * 이게 그러면 이렇게 되는거네, 맨아래쪽에는 회색벽돌이 많고, 위로 갈수록 회색 벽돌이 적어지는데,
+   * 그 startline윗부분은 전부 회색벽돌
+   */
   for (let i = 0, len = 20 - startLines; i < len; i++) { // 插入上部分的灰色
     startMatrix = startMatrix.unshift(List(blankLine));
   }
