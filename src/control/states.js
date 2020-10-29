@@ -76,19 +76,33 @@ const getStartMatrix = (startLines) => {
 };
 
 const states = {
-  // 自动下落setTimeout变量
+  /**
+   * 자동으로 떨어지는 setTimeout 변수
+   */
   fallInterval: null,
 
-  // 游戏开始
+  // 게임시작
   start: () => {
     if (music.start) {
       music.start();
     }
     const state = store.getState();
-    states.dispatchPoints(0);
+    states.dispatchPoints(0); // point를 0으로 초기화
+    /**
+     * speedRun은 뭐냐? speedStart는 또 뭐고?
+     */
     store.dispatch(actions.speedRun(state.get('speedStart')));
+    /**
+     * 그러네, 시작하기 전에 startLines를 설정하고 시작하니까, state에 startLines값이 있겠구만.
+     */
     const startLines = state.get('startLines');
+    /**
+     * startLines를 바탕으로 matrix를 가져온다.
+     */
     const startMatrix = getStartMatrix(startLines);
+    /**
+     * matrix action은 뭐야,,, 무슨 의도를 갖고 dispatch한거야?
+     */
     store.dispatch(actions.matrix(startMatrix));
     store.dispatch(actions.moveBlock({ type: state.get('next') }));
     store.dispatch(actions.nextBlock());
