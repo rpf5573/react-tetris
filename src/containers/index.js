@@ -182,12 +182,32 @@ class App extends React.Component {
          * 
          * 잠깐!! filling은 250 이나리 마지막에 3으로 나눈 83.333 이 된다.
          * 왜? 3으로 나눈거지? 
+         * 
+         * 자 봐봐, 3조각으로 나눴는데, 이 세조각을 어쨋든 다 써야 게임기가 브라우저의 세로길이에 맞게 꽉 차잖아?
+         * 우선 2조각은 paddingTop, paddingBottom에 사용했어. 이제 남은 1조각만 쓰면 되는데
+         * 남은 한조각은 아래에 보면 Keyboard에 넘겼어 그래서 keyboard 코드에 넘어가서 찾아보면
+         * margin-top : 20 + filling 이렇게 해놨어!!!
+         * 
+         * 드디어 filling을 구하는 공식을 이해해 버렸다!! 나 이 수
+         * 
          */
         scale = w / 640;
         filling = (h - (960 * scale)) / scale / 3;
         css = {
           paddingTop: Math.floor(filling) + 42,
           paddingBottom: Math.floor(filling),
+          /**
+           * 왜 filling에 1.5를 곱한거에유?
+           * 
+           * 자, 봐봐, 게임기의 세로길이를 브라우저의 세로길이만큼 늘렸어. 예를들어서, 브라우저의 세로길이가
+           * 1600이야. 그래서 게임기의 세로길이도 filling을 위에 넣고 아래넣고 키보드 위에 넣고 해가지고 960px + 3 * filling 해서
+           * 1600을 만든거야(게임기의 세로길이를).
+           * 그리고 이 marginTop의 기능은 게임기의 세로길이가 브라우저의 세로길이 만큼 늘어났는데 문제는 이게 absolut, top: 50%, left:50%라서
+           * 아래로 내려가있고, 위가 비잖아. 그래서 marginTop을 줘야하는데, 우선 최소 960px보다는 크니까 그 반절인 480만큼 올리고,
+           * 나머지 3 * filling도 그 반절인 3 * filling * (1/2)를 해서 결국 filling * (3/2) = filling * 1.5가 된거야.
+           * 
+           * 휴! 이제 정말 어려운 산은 넘었다~
+          */
           marginTop: Math.floor(-480 - (filling * 1.5)),
         };
       }
