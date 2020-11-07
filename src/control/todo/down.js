@@ -27,9 +27,25 @@ const down = (store) => {
           states.pause(false);
           return;
         }
+        /**
+         * 이 next는 뭘까?
+         */
         const next = cur.fall();
         if (want(next, state.get('matrix'))) {
+          /**
+           * 여기서 dispatch하면 무슨 일이 일어날까?
+           * store.state.cur이 바뀔거야. 그리고 화면이 다시그러져겠지
+           * matrix에 블럭이 그려질거야.
+           */
           store.dispatch(actions.moveBlock(next));
+          /**
+           * 그다음에 바로 states.auto()를 했는데,,,이게 dispatch하고 나서 auto()를 하는거라면
+           * dispatch의 callback함수로 넣는게 맞지 않겠나? 이렇게 하면 비동기적으로 되서
+           * 좀,, 의도치 않게 도형이 아래로 내려갈 수도 있을것 같은디
+           * 
+           * 아, dispatch는 동기적으로 작동한다고하네. 하기야 그럴것이, setState()랑은 다르게 그냥
+           * dispatch하고, props를 싹다 전달하고, 싹다 다시그리는거니까
+           */
           states.auto();
         } else {
           let matrix = state.get('matrix');
