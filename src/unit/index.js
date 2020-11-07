@@ -26,7 +26,10 @@ const isFocus = () => {
 };
 
 const unit = {
-  getNextType() { // 随机获取下一个方块类型
+  /**
+   * 다음 랜덤 타입을 가져온다
+   */
+  getNextType() {
     const len = blockType.length;
     return blockType[Math.floor(Math.random() * len)];
   },

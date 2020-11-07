@@ -4,8 +4,12 @@ import cn from 'classnames';
 import { i18n, lan } from '../../unit/const';
 import style from './index.less';
 
+/**
+ * 게임창을 꾸며주는 컴포넌트
+ */
 export default class Decorate extends React.Component {
   shouldComponentUpdate() {
+    // 이 컴포넌트는 절대 re-render하지 않겠다는 굳은 의지
     return false;
   }
   render() {

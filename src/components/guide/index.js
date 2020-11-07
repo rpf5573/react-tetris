@@ -4,7 +4,7 @@ import style from './index.less';
 import { transform, i18n, lan } from '../../unit/const';
 import { isMobile } from '../../unit';
 
-
+/** 나는 Guide가 필요 없기떄문에 이건 안볼란다 */
 export default class Guide extends React.Component {
   constructor() {
     super();
